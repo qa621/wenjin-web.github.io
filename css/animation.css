@@ -1,0 +1,151 @@
+/* animation.css —— 全部关键帧；开场动画的图层与时间轴都在这里，时长/延迟取自 base.css 的变量 */
+
+@keyframes blink { 0%,100%{opacity:.25} 50%{opacity:1} }
+
+@keyframes grabbable { 0%,100%{ transform:scale(1); } 50%{ transform:scale(1.09); } }
+
+@keyframes swayA { from{ transform:rotate(-26deg) translateX(-26%); } to{ transform:rotate(22deg) translateX(26%); } }
+
+@keyframes swayB { from{ transform:rotate(14deg) translateX(22%); }  to{ transform:rotate(-20deg) translateX(-22%); } }
+
+@keyframes swayC { from{ transform:rotate(-8deg) translateX(-16%); }  to{ transform:rotate(34deg) translateX(18%); } }
+
+@keyframes drift { from{ top:-10%; } to{ top:82%; } }
+
+@keyframes glowping { 0%,100%{ filter:saturate(.4) brightness(1.05) blur(.35px); }
+                      50%{ filter:saturate(.65) brightness(1.9) blur(0) drop-shadow(0 0 9px rgba(255,220,150,.95)); } }
+
+@keyframes openup { from{ width:5%; opacity:.2; } to{ width:64%; opacity:1; } }
+
+@keyframes glint { 0%,90%,100%{ opacity:.08; filter:brightness(.5); }
+                   94%{ opacity:.95; filter:brightness(2) drop-shadow(0 0 14px rgba(205,228,255,.95)); } }
+
+@keyframes holeFlicker { 0%,100%{ filter:brightness(1) } 50%{ filter:brightness(1.55) } }
+
+@keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+
+@keyframes sparkOut { from{ transform:translate(-50%,-50%) scale(.5); opacity:1; }
+                      to  { transform:translate(-50%,-50%) scale(2.4); opacity:0; } }
+
+@keyframes rippleOut {
+  from{ transform:translate(-50%,-50%) scale(.32); opacity:.95; }
+  to  { transform:translate(-50%,-50%) scale(1.7);  opacity:0; }
+}
+
+@keyframes filmPush { from{ transform:scale(1); } to{ transform:scale(1.09); } }
+
+@keyframes ballTremble {
+  0%  { transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+  25% { transform:translate(-50.7%,-49.3%) scale(1.014) rotate(-1.2deg); }
+  75% { transform:translate(-49.3%,-50.7%) scale(1.014) rotate(1.2deg); }
+  100%{ transform:translate(-50%,-50%) scale(1) rotate(0deg); }
+}
+
+@keyframes sealPop {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.35); filter: brightness(1.6) drop-shadow(0 0 18px rgba(220,120,80,.95)); }
+  100% { transform: scale(1); }
+}
+@keyframes sealIn {
+  from { opacity: 0; transform: translate(-50%, -46%) scale(.94); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+@keyframes torchSway {
+  0%, 100% { transform: rotate(-2.4deg); }
+  50%      { transform: rotate(2.4deg); }
+}
+@keyframes handSway {
+  0%, 100% { transform: translate(-50%, -62%) rotate(-5deg); }
+  50%      { transform: translate(-50%, -62%) rotate(2deg); }
+} 
+@keyframes glowPulse {
+  0%,100%{ filter:brightness(1) drop-shadow(0 0 18px rgba(255,240,200,.75)); }
+  50%    { filter:brightness(1.55) drop-shadow(0 0 46px rgba(255,244,214,.95)); }
+}
+
+@keyframes crackPop { from{ transform:translate(-50%,-50%) scale(.93); filter:brightness(1.5); }
+                      to  { transform:translate(-50%,-50%) scale(1.07); filter:brightness(2.2); } }
+
+/* 《问津》 —— film.css */
+/* ---------- 开场动画（深夜书桌 → 揉成纸团） ---------- */
+#film { position:absolute; inset:0; z-index:55; background:#0a0a0c; overflow:hidden; cursor:pointer; }
+#film.gone { display:none; }
+.filmImg { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+           opacity:0; transition:opacity .12s linear; }
+.filmImg.on { opacity:1; }
+#f1.on { animation:filmPush 9s ease-out forwards; }
+#filmBall, #filmGlow, #filmCrack { position:absolute; left:50%; top:50%; width:34%;
+            transform:translate(-50%,-50%) scale(1.35); opacity:0;
+            transition:opacity .22s ease, transform .8s cubic-bezier(.2,.72,.3,1); }
+#filmBall.in, #filmGlow.in, #filmCrack.in { opacity:1; transform:translate(-50%,-50%) scale(1); }
+#filmBall.gone { opacity:0; transition:opacity .28s ease; }
+/* 纸团开始颤动 */
+#filmBall.tremble { animation:ballTremble .15s linear infinite; }
+/* 折痕发暖白的光，越来越亮 */
+#filmGlow.in { animation:glowPulse 1s ease-in-out infinite; }
+#filmCrack.in { animation:crackPop .55s ease-out forwards; }
+#filmFlash { position:absolute; inset:0; opacity:0; pointer-events:none; transition:opacity .35s ease;
+    background:radial-gradient(circle at 50% 50%, rgba(255,252,242,.88), rgba(255,244,220,.5) 40%, rgba(255,240,210,0) 74%); }
+#filmFlash.on { opacity:1; }
+/* 桃花林：花雨散开时从后面缓缓浮现，与标题那屏用同一张图 */
+#filmGrove { position:absolute; inset:0; opacity:0; pointer-events:none;
+    transition:opacity 2.6s ease;
+    background:url('../assets/bg-title.jpg') center/cover no-repeat;
+    filter:blur(16px) saturate(.92) brightness(1.06); }
+#filmGrove::after { content:''; position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(208,219,244,.55), rgba(231,221,240,.44) 45%, rgba(245,239,231,.52)); }
+#filmGrove.on { opacity:1; }
+/* 花瓣粒子画在这里（数百片，逐片旋转与受风） */
+#filmCanvas { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; }
+/* 全局浅金色辉光 */
+#filmGold { position:absolute; inset:0; pointer-events:none; opacity:0; mix-blend-mode:screen;
+    transition:opacity 1.6s ease;
+    background:radial-gradient(circle at 50% 52%, rgba(255,228,168,.45), rgba(255,214,140,.17) 42%, rgba(255,200,120,0) 78%); }
+#filmGold.on { opacity:1; }
+/* 桃花酿：纸团揉碎后的黑暗里渐显 */
+#filmBottle { position:absolute; inset:0; opacity:0; pointer-events:none;
+    transition:opacity 1.8s ease;
+    background:url('../assets/bg-brew.jpg') center/cover no-repeat; }
+#filmBottle.on { opacity:1; }
+/* 开场旁白 */
+#filmNarr { position:absolute; left:8%; right:8%; bottom:10%; z-index:3; pointer-events:none;
+    color:#f4ecdc; text-align:center; letter-spacing:.05em; line-height:1.95;
+    font-size:clamp(14px,1.85vw,26px); opacity:0; transition:opacity .9s ease;
+    text-shadow:0 2px 16px rgba(0,0,0,.8); }
+#filmNarr.on { opacity:1; }
+/* 浮出桃花酿之后是浅色纸面，文字改用墨色 */
+#filmNarr.dark { color:#1b1a17; text-shadow:0 1px 10px rgba(255,255,255,.72); }
+/* 花瓣散尽后的对话提示：点击继续 */
+#filmTap { position:absolute; right:5%; bottom:4.5%; z-index:4; pointer-events:none;
+    color:rgba(244,236,220,.78); letter-spacing:.18em;
+    font-size:clamp(11px,1.25vw,16px); opacity:0; transition:opacity .4s ease; }
+#filmTap.on { opacity:1; animation:blink 1.4s ease-in-out infinite; }
+#filmTap.dark { color:rgba(27,26,23,.78); text-shadow:0 1px 8px rgba(255,255,255,.6); }
+#film.out { opacity:0; pointer-events:none; transition:opacity 1.2s ease; }
+#filmStart { position:absolute; inset:0; display:flex; align-items:flex-end;
+             justify-content:center; padding-bottom:13%; }
+#filmStart.hide { display:none; }
+#filmStart span { padding:.5em 1.7em; border:1px solid rgba(242,232,212,.55); border-radius:3px;
+                  color:#f2e8d4; letter-spacing:.42em; text-indent:.42em;
+                  font-size:clamp(13px,1.6vw,22px); background:rgba(0,0,0,.30); }
+#filmSkip { position:absolute; right:2.6%; bottom:2.6%; z-index:2;
+            color:rgba(242,232,212,.55); letter-spacing:.2em;
+            font-size:clamp(11px,1.2vw,15px); }
+#filmSkip.hide { display:none; }
+
+#popup { position:absolute; left:12%; right:16.5%; bottom:8%; z-index:40;
+         background:rgba(250,246,238,.94); border:1px solid rgba(120,100,70,.4);
+         border-radius:4px; padding:1em 1.3em; cursor:pointer;
+         box-shadow:0 6px 24px rgba(0,0,0,.45); }
+#popup p { margin:0; font-size:clamp(13px,1.7vw,22px); line-height:1.85;
+           color:#2c2419; text-align:center; }
+#popup span { display:block; margin-top:.5em; text-align:right;
+              font-size:clamp(10px,1.1vw,14px); color:#7a6a4e; }
+
+.toast { position:absolute; left:50%; top:11%; transform:translateX(-50%); z-index:35;
+         padding:.4em 1em; background:rgba(250,246,238,.9); border-radius:4px;
+         font-size:clamp(11px,1.3vw,17px); color:#5a4a33; }
+@keyframes bilogueIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
